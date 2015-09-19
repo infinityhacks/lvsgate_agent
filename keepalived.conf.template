@@ -1,0 +1,33 @@
+global_defs {
+}
+
+vrrp_instance VI_1 {
+    state BACKUP
+    nopreempt
+    interface ${vrrp_interface}
+    dont_track_primary
+    virtual_router_id ${virtual_router_id}
+    priority ${vrrp_priority}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        <?py for vip,dev in virtual_ipaddress.items(): ?>
+        ${vip} dev ${dev}
+	<?py #endfor ?>
+    }
+    virtual_ipaddress_excluded {
+      
+    }
+}
+
+local_address_group laddr_group {
+    <?py for laddr in local_address: ?>
+    ${laddr}
+    <?py #endfor ?>
+}
+
+include vs.conf
+include snat.conf

@@ -10,7 +10,7 @@ import urllib
 import json
 
 
-def excute_cmd(args, timeout=5):
+def execute_cmd(args, timeout=5):
     status, output = -1, "excute cmd(%s) fail" % args;
     p = subprocess.Popen(args, stdin=subprocess.PIPE,
       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)

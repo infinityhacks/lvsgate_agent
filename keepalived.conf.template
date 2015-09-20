@@ -14,7 +14,7 @@ vrrp_instance VI_1 {
         auth_pass 1111
     }
     virtual_ipaddress {
-        <?py for vip,dev in virtual_ipaddress.items(): ?>
+        <?py for vip,dev in virtual_ipaddress: ?>
         ${vip} dev ${dev}
 	<?py #endfor ?>
     }

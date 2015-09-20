@@ -18,7 +18,7 @@ from keepalived import Keepalived
 
 __VERSION__ = '1.0'
 
-log = log.get_stream_logger("", logging.DEBUG)
+slog = log.get_stream_logger("main", logging.DEBUG)
 main_log = logging.getLogger("main")
 
 keepalived = Keepalived()
@@ -58,13 +58,23 @@ class LVSRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       return
 
     post = self.rfile.read(body_len)
+    self.log_message("POST DATA:%s"%post)
     param = json.loads(post)
+    
+    if self.path == '/update_base':
+      keepalived.update_base_conf(param)
+    elif self.path == '/update_vs':
+      keepalived.update_vs_conf(param)
+    elif self.path == '/update_snat':
+      keepalived.update_snat_conf(param)
+    else:
+      self.send_error(404)
+      return
 
-    keepalived.update_conf(param)
     keepalived.reload()
 
     resp = {'status': 0, 'msg': 'OK'}
-    self.send_normal_response(200, json.dumps(resp)) 
+    self.send_normal_response(200, json.dumps(resp))
 
 
 class LVSHTTPServer(BaseHTTPServer.HTTPServer):

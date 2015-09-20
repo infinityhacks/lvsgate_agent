@@ -19,7 +19,7 @@ def send_http_post(url, param):
 
   
 def test_api_ipconfig(host, port):
-  url = "http://%s:%s/"%(host, port)
+  url = "http://%s:%s/update_base"%(host, port)
   param = {
           'vrrp_interface': 'eth0',
           'virtual_router_id': 254,
@@ -35,7 +35,12 @@ def test_api_ipconfig(host, port):
                 '10.0.1.252',
           ],
   }
-  
+  send_http_post(url, param)
+
+def test_api_vsconfig(host, port):
+  url = "http://%s:%s/update_vs"%(host, port)
+  param = {
+  }
   send_http_post(url, param)
   
 if __name__ == '__main__':

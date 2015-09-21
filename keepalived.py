@@ -29,6 +29,10 @@ class Keepalived:
     f.write(output)
     f.close()
 
+    if not os.path.exists(conf_path):
+      f = open(conf_path, 'w')
+      f.close()
+
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     shutil.copyfile(conf_path, "%s-%s"%(conf_path, timestamp))

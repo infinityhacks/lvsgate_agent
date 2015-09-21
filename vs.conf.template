@@ -1,0 +1,31 @@
+<?py for vs in virtual_server: ?>
+virtual_server_group ${vs['name']} {
+<?py for ip, port in vs['listen_address']: ?>
+${ip} ${port}
+<?py #endfor ?>
+}
+
+virtual_server group ${vs['name']} {
+	delay_loop ${vs['delay_loop']}
+	lb_algo ${vs['lb_algo']}
+	lb_kind ${vs['lb_kind']}
+	<?py if vs['syn_proxy']: ?>
+	syn_proxy
+	<?py #endif ?>
+
+	laddr_group_name laddr_group
+	protocol ${vs['protocol']}
+	rise ${vs['rise']}
+	fall ${vs['fall']}
+
+<?py for rs in vs['real_server']: ?>
+	real_server ${rs['address'][0]} ${rs['address'][1]} {
+		weight ${rs['weight']}
+		<?py health_check = rs['health_check'] ?> 
+	        #{health_check['type']} {
+			connect_timeout #{health_check['connect_timeout']}
+		}
+	}
+<?py #endfor ?>
+}
+<?py #endfor ?>

@@ -1,0 +1,28 @@
+<?py for name, pool in snat_ip_pool.items(): ?>
+snat_ippool_group ${name} {
+	<?py for ip in pool: ?>
+	${ip}
+	<?py #endfor ?>
+}
+<?py #endfor ?>
+
+<?py for mark in (1, 2, 3): ?>
+virtual_server fwmark ${mark} {
+<?py for snat_rule in snat_rules: ?>
+    snat_rule {
+	from ${snat_rule['from']}
+	snat_ip ${snat_rule['snat_ip']}
+	algo ${snat_rule['algo']}
+	<?py if 'oif' in snat_rule: ?>
+	oif ${snat_rule['oif']}
+	<?py #endif ?>
+	<?py if 'gw' in snat_rule: ?>
+	gw ${snat_rule['gw']}
+	<?py #endif ?>
+	<?py if 'new_gw' in snat_rule: ?>
+	new_gw ${snat_rule['new_gw']}
+	<?py #endif ?>
+    }
+<?py #endfor ?>
+}
+<?py #endfor ?>

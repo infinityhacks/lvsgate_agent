@@ -137,12 +137,40 @@ def test_api_vsconfig(host, port):
 
                         ]
                 },
-          ]
+          ],
   }
   send_http_post(url, param)
+
+def test_api_snatconfig(host, port):
+  url = "http://%s:%s/update_snat"%(host, port)
+  param = {
+        'snat_ip_pool': {
+                  'snat_ip_pool_1': ['192.168.200.64-150', '192.168.200.200-254'],
+                  'snat_ip_pool_2': ['192.168.200.64-254',],
+          },
+          'snat_rules': [
+                {
+                        'from': '10.0.0.0/24',
+                        'gw': '192.168.0.2',
+                        'snat_ip': 'snat_ip_pool_1',
+                        'algo': 'random',
+                },
+                {
+                        'from': '10.0.0.3/32',
+                        'new_gw': '192.168.0.2',
+                        'oif': 'eth0',
+                        'snat_ip': 'snat_ip_pool_2',
+                        'algo': 'random',
+                }
+          ]
+  }
+
+  send_http_post(url, param)     
+
   
 if __name__ == '__main__':
   import sys
   host, port = sys.argv[1], sys.argv[2]
   test_api_ipconfig(host, port)
   test_api_vsconfig(host, port)
+  test_api_snatconfig(host, port)

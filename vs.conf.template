@@ -22,8 +22,15 @@ virtual_server group ${vs['name']} {
 	real_server ${rs['address'][0]} ${rs['address'][1]} {
 		weight ${rs['weight']}
 		<?py health_check = rs['health_check'] ?> 
-	        #{health_check['type']} {
+		#{health_check['type']} {
+
+		<?py if health_check['type'] == 'MISC_CHECK': ?>
+			misc_path "#{health_check['misc_path']}"
+			misc_timeout #{health_check['misc_timeout']}
+		<?py else: ?>
 			connect_timeout #{health_check['connect_timeout']}
+		<?py #endif ?>
+		
 		}
 	}
 <?py #endfor ?>

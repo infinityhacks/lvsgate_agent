@@ -120,10 +120,21 @@ def test_api_vsconfig(host, port):
                                         'address': ('10.0.0.3', 53),
                                         'weight': 1,
                                         'health_check': {
-                                                'type': 'TCP_CHECK',
-                                                'connect_timeout': 5
+                                                'type': 'MISC_CHECK',
+                                                'misc_timeout': 5,
+						'misc_path': "/root/lvs_gate/lbg_agent/check_udp.sh 10.0.0.3 53",
                                         }
                                 },
+				{
+                                        'address': ('10.0.0.3', 54),
+                                        'weight': 1,
+                                        'health_check': {
+                                                'type': 'MISC_CHECK',
+                                                'misc_timeout': 5,
+						'misc_path': "/root/lvs_gate/lbg_agent/check_udp.sh 10.0.0.3 54",
+                                        }
+                                },
+
                         ]
                 },
           ]
